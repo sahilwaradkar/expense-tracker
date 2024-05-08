@@ -1,3 +1,4 @@
+import 'package:assignment/core/utils/get_month.dart';
 import 'package:assignment/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -38,7 +39,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
             if(snapshot.hasError){
               return Center(child:  Text(snapshot.error.toString()),);
             }else{
-              return TransactionList();
+              return TransactionList(selectedMonth: getMonth(DateTime.now().month),);
             }
           }
           else{

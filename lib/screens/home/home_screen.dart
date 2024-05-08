@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/utils/convert_date_time.dart';
+import '../../core/utils/get_month.dart';
 import '../../models/transaction.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,6 +19,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late Future _transactionList;
+  String? selectedMonth;
 
   Future _getTransactionList() async {
     final databaseProvider =
@@ -30,44 +32,14 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _transactionList = _getTransactionList().then((value) =>
         Provider.of<DatabaseProvider>(context, listen: false).updateBalance());
+    selectedMonth = getMonth(DateTime.now().month);
   }
 
   @override
   Widget build(BuildContext context) {
     final databaseProvider = Provider.of<DatabaseProvider>(context);
     final bottomNavBarController = Provider.of<BottomNavBarController>(context);
-    String getMonth(int month) {
-      switch (month) {
-        case 1:
-          return 'January';
-        case 2:
-          return 'February';
-        case 3:
-          return 'March';
-        case 4:
-          return 'April';
-        case 5:
-          return 'May';
-        case 6:
-          return 'June';
-        case 7:
-          return 'July';
-        case 8:
-          return 'August';
-        case 9:
-          return 'September';
-        case 10:
-          return 'October';
-        case 11:
-          return 'November';
-        case 12:
-          return 'December';
-        default:
-          return '';
-      }
-    }
 
-    String selectedMonth = getMonth(DateTime.now().month);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -92,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
             hint: Text('Select Month'),
             onChanged: (value) {
               setState(() {
-                selectedMonth = value!;
+                selectedMonth = value;
               });
             },
             items: <String>[
@@ -189,7 +161,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   amount: databaseProvider.expense.toStringAsFixed(1),
                   icon: SvgPicture.asset(
                     ImageResource.expense,
-                    colorFilter: ColorFilter.mode(AppColors.red, BlendMode.srcIn),
+                    colorFilter:
+                        ColorFilter.mode(AppColors.red, BlendMode.srcIn),
                   ),
                   color: AppColors.red,
                 )
@@ -252,11 +225,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     return Center(
                       child: Text(snapshot.error.toString()),
                     );
-                  } else if(!snapshot.hasData){
-                    return Center(child: Text('No Transactions found', style: TextStyle(fontStyle: FontStyle.italic, color: AppColors.grey),),);
-                  }
-                  else {
-                    return TransactionList();
+                  } else if (!snapshot.hasData) {
+                    return Center(
+                      child: Text(
+                        'No Transactions found',
+                        style: TextStyle(
+                            fontStyle: FontStyle.italic, color: AppColors.grey),
+                      ),
+                    );
+                  } else {
+                    return TransactionList(selectedMonth: selectedMonth,);
                   }
                 } else {
                   return const Center(
@@ -273,7 +251,9 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class TransactionList extends StatelessWidget {
-  const TransactionList({
+  String? selectedMonth;
+  TransactionList({
+    required this.selectedMonth,
     super.key,
   });
 
@@ -285,117 +265,139 @@ class TransactionList extends StatelessWidget {
         return ListView.builder(
             itemCount: list.length,
             itemBuilder: (context, index) {
-              return Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                color: list[index].category.toLowerCase() ==
-                                        'shopping'
-                                    ? AppColors.yellow.withOpacity(0.2)
-                                    : list[index].category.toLowerCase() ==
-                                            'subscription'
-                                        ? AppColors.primary.withOpacity(0.2)
-                                        : list[index].category.toLowerCase() ==
-                                                'travel'
-                                            ? AppColors.blue.withOpacity(0.2)
-                                            : list[index]
-                                                        .category
-                                                        .toLowerCase() ==
-                                                    'food'
-                                                ? AppColors.red.withOpacity(0.2)
-                                                : AppColors.green
-                                                    .withOpacity(0.2)),
-                            child: SvgPicture.asset(
-                              list[index].category.toLowerCase() == 'shopping'
-                                  ? ImageResource.shoppingBag
-                                  : list[index].category.toLowerCase() ==
-                                          'subscription'
-                                      ? ImageResource.subscription
-                                      : list[index].category.toLowerCase() ==
-                                              'travel'
-                                          ? ImageResource.travel
+              return selectedMonth ==
+                  getMonth(DateTime.parse(list[index].date.toString())
+                          .month)
+
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 15.0, horizontal: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                  padding: EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: list[index]
+                                                  .category
+                                                  .toLowerCase() ==
+                                              'shopping'
+                                          ? AppColors.yellow.withOpacity(0.2)
                                           : list[index]
                                                       .category
                                                       .toLowerCase() ==
-                                                  'food'
-                                              ? ImageResource.food
-                                              : ImageResource.other,
-                              width: 40,
-                              colorFilter: ColorFilter.mode(
-                                  list[index].category.toLowerCase() ==
-                                          'shopping'
-                                      ? AppColors.yellow
-                                      : list[index].category.toLowerCase() ==
-                                              'subscription'
-                                          ? AppColors.primary
-                                          : list[index]
-                                                      .category
-                                                      .toLowerCase() ==
-                                                  'travel'
-                                              ? AppColors.blue
+                                                  'subscription'
+                                              ? AppColors.primary
+                                                  .withOpacity(0.2)
                                               : list[index]
                                                           .category
                                                           .toLowerCase() ==
-                                                      'food'
-                                                  ? AppColors.red
-                                                  : AppColors.green,
-                                  BlendMode.srcIn),
-                            )),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              list[index].category,
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500,
-                                  color: Theme.of(context).brightness ==
-                                          Brightness.light
-                                      ? AppColors.black
-                                      : AppColors.white),
-                            ),
-                            Text(
-                              list[index].desc,
-                              style: TextStyle(color: AppColors.grey),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          list[index].type.toLowerCase() == 'expense'
-                              ? '-\u{20B9}' + list[index].amount.toString()
-                              : '+\u{20B9}' + list[index].amount.toString(),
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: list[index].type.toLowerCase() == 'expense'
-                                  ? AppColors.red
-                                  : AppColors.green),
-                        ),
-                        Text(
-                          convertDateTime(list[index].date),
-                          style: TextStyle(color: AppColors.grey),
-                        ),
-                      ],
+                                                      'travel'
+                                                  ? AppColors.blue
+                                                      .withOpacity(0.2)
+                                                  : list[index]
+                                                              .category
+                                                              .toLowerCase() ==
+                                                          'food'
+                                                      ? AppColors.red
+                                                          .withOpacity(0.2)
+                                                      : AppColors.green
+                                                          .withOpacity(0.2)),
+                                  child: SvgPicture.asset(
+                                    list[index].category.toLowerCase() ==
+                                            'shopping'
+                                        ? ImageResource.shoppingBag
+                                        : list[index].category.toLowerCase() ==
+                                                'subscription'
+                                            ? ImageResource.subscription
+                                            : list[index]
+                                                        .category
+                                                        .toLowerCase() ==
+                                                    'travel'
+                                                ? ImageResource.travel
+                                                : list[index]
+                                                            .category
+                                                            .toLowerCase() ==
+                                                        'food'
+                                                    ? ImageResource.food
+                                                    : ImageResource.other,
+                                    width: 40,
+                                    colorFilter: ColorFilter.mode(
+                                        list[index].category.toLowerCase() ==
+                                                'shopping'
+                                            ? AppColors.yellow
+                                            : list[index]
+                                                        .category
+                                                        .toLowerCase() ==
+                                                    'subscription'
+                                                ? AppColors.primary
+                                                : list[index]
+                                                            .category
+                                                            .toLowerCase() ==
+                                                        'travel'
+                                                    ? AppColors.blue
+                                                    : list[index]
+                                                                .category
+                                                                .toLowerCase() ==
+                                                            'food'
+                                                        ? AppColors.red
+                                                        : AppColors.green,
+                                        BlendMode.srcIn),
+                                  )),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    list[index].category,
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500,
+                                        color: Theme.of(context).brightness ==
+                                                Brightness.light
+                                            ? AppColors.black
+                                            : AppColors.white),
+                                  ),
+                                  Text(
+                                    list[index].desc,
+                                    style: TextStyle(color: AppColors.grey),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                list[index].type.toLowerCase() == 'expense'
+                                    ? '-\u{20B9}' +
+                                        list[index].amount.toString()
+                                    : '+\u{20B9}' +
+                                        list[index].amount.toString(),
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    color: list[index].type.toLowerCase() ==
+                                            'expense'
+                                        ? AppColors.red
+                                        : AppColors.green),
+                              ),
+                              Text(
+                                convertDateTime(list[index].date),
+                                style: TextStyle(color: AppColors.grey),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
                     )
-                  ],
-                ),
-              );
+                  : SizedBox();
             });
       },
     );
