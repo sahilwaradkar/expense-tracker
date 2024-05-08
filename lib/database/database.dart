@@ -43,6 +43,7 @@ class DatabaseProvider extends ChangeNotifier{
     final Database? db = await database;
     await db!.insert('transactions', transaction.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
+    getTransactions();
     updateBalance();
     notifyListeners();
   }

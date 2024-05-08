@@ -239,8 +239,11 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                               category: selectedCategory ?? 'Other',
                               desc: descriptionController.text,
                               date: DateTime.now().toString(),
-                              type: 'Income'))
-                          .then((_) => Navigator.pop(context));
+                              type: 'Expense'))
+                          .then((_) {
+                        databaseProvider.updateBalance();
+                        Navigator.pop(context);
+                      });
                     },
                   )
                   // Container(

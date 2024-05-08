@@ -136,129 +136,137 @@ class _HomeScreenState extends State<HomeScreen> {
               ))
         ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  'Account Balance',
-                  style: TextStyle(
-                      color: AppColors.grey, fontWeight: FontWeight.w500),
-                ),
-                Text(
-                  '\u{20B9}' + databaseProvider.balance.toStringAsFixed(2),
-                  style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.w600,
-                      color: Theme.of(context).brightness == Brightness.light
-                          ? AppColors.black
-                          : AppColors.white),
-                ),
-              ],
+      body: RefreshIndicator(
+        onRefresh: () async {
+          databaseProvider.updateBalance();
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    'Account Balance',
+                    style: TextStyle(
+                        color: AppColors.grey, fontWeight: FontWeight.w500),
+                  ),
+                  Text(
+                    '\u{20B9}' + databaseProvider.balance.toStringAsFixed(1),
+                    style: TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.w600,
+                        color: Theme.of(context).brightness == Brightness.light
+                            ? AppColors.black
+                            : AppColors.white),
+                  ),
+                ],
+              ),
             ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              IndicatorCard(
-                title: 'Income',
-                amount: databaseProvider.income.toStringAsFixed(2),
-                icon: SvgPicture.asset(
-                  ImageResource.income,
-                  colorFilter:
-                      ColorFilter.mode(AppColors.green, BlendMode.srcIn),
-                ),
-                color: AppColors.green,
-              ),
-              IndicatorCard(
-                title: 'Expense',
-                amount: databaseProvider.expense.toStringAsFixed(2),
-                icon: SvgPicture.asset(
-                  ImageResource.expense,
-                  colorFilter: ColorFilter.mode(AppColors.red, BlendMode.srcIn),
-                ),
-                color: AppColors.red,
-              )
-            ],
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              CustomTab(
-                title: 'Today',
-                color: AppColors.yellow,
-              ),
-              CustomTab(
-                title: 'Week',
-              ),
-              CustomTab(
-                title: 'Month',
-              ),
-              CustomTab(
-                title: 'Year',
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 10, top: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Text(
-                  'Recent Transaction',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20,
-                      color: Theme.of(context).brightness == Brightness.light
-                          ? AppColors.black
-                          : AppColors.white),
+                IndicatorCard(
+                  title: 'Income',
+                  amount: databaseProvider.income.toStringAsFixed(1),
+                  icon: SvgPicture.asset(
+                    ImageResource.income,
+                    colorFilter:
+                        ColorFilter.mode(AppColors.green, BlendMode.srcIn),
+                  ),
+                  color: AppColors.green,
                 ),
-                CustomTab(
-                  onTap: () {
-                    bottomNavBarController.updateIndex(1);
-                  },
-                  title: 'See all',
-                  color: AppColors.primary,
+                IndicatorCard(
+                  title: 'Expense',
+                  amount: databaseProvider.expense.toStringAsFixed(1),
+                  icon: SvgPicture.asset(
+                    ImageResource.expense,
+                    colorFilter: ColorFilter.mode(AppColors.red, BlendMode.srcIn),
+                  ),
+                  color: AppColors.red,
                 )
               ],
             ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Expanded(
-              child: FutureBuilder(
-            future: databaseProvider.getTransactions(),
-            builder: (_, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasError) {
-                  return Center(
-                    child: Text(snapshot.error.toString()),
-                  );
+            SizedBox(
+              height: 30,
+            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //   children: [
+            //     CustomTab(
+            //       title: 'Today',
+            //       color: AppColors.yellow,
+            //     ),
+            //     CustomTab(
+            //       title: 'Week',
+            //     ),
+            //     CustomTab(
+            //       title: 'Month',
+            //     ),
+            //     CustomTab(
+            //       title: 'Year',
+            //     ),
+            //   ],
+            // ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, right: 10, top: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Recent Transaction',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 20,
+                        color: Theme.of(context).brightness == Brightness.light
+                            ? AppColors.black
+                            : AppColors.white),
+                  ),
+                  CustomTab(
+                    onTap: () {
+                      bottomNavBarController.updateIndex(1);
+                    },
+                    title: 'See all',
+                    color: AppColors.primary,
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Expanded(
+                child: FutureBuilder(
+              future: databaseProvider.getTransactions(),
+              builder: (_, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(snapshot.error.toString()),
+                    );
+                  } else if(!snapshot.hasData){
+                    return Center(child: Text('No Transactions found', style: TextStyle(fontStyle: FontStyle.italic, color: AppColors.grey),),);
+                  }
+                  else {
+                    return TransactionList();
+                  }
                 } else {
-                  return TransactionList();
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
                 }
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
-          )),
-        ],
+              },
+            )),
+          ],
+        ),
       ),
     );
   }
@@ -273,7 +281,7 @@ class TransactionList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<DatabaseProvider>(
       builder: (_, db, __) {
-        var list = db.transactions;
+        var list = db.transactions.reversed.toList();
         return ListView.builder(
             itemCount: list.length,
             itemBuilder: (context, index) {

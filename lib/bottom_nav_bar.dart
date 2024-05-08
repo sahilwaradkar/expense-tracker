@@ -2,6 +2,7 @@ import 'package:assignment/controller/bottom_nav_bar/bottom_nav_bar_controller.d
 import 'package:assignment/core/constant/colors.dart';
 import 'package:assignment/core/constant/image_resource.dart';
 import 'package:assignment/screens/add_transaction/add_expense_screen.dart';
+import 'package:assignment/screens/add_transaction/add_income_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -45,7 +46,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
               color: AppColors.white,
             )),
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => AddExpenseScreen()));
+          controller.showAddOptions(context);
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

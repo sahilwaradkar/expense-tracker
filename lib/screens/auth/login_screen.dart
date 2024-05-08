@@ -2,7 +2,7 @@ import 'package:assignment/bottom_nav_bar.dart';
 import 'package:assignment/controller/auth/auth_controller.dart';
 import 'package:assignment/core/constant/colors.dart';
 import 'package:assignment/core/constant/image_resource.dart';
-import 'package:assignment/screens/auth/login_screen.dart';
+import 'package:assignment/screens/auth/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -10,14 +10,14 @@ import 'package:provider/provider.dart';
 import '../../core/utils/email_validation.dart';
 import '../../core/utils/password_validation.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _LoginScreenState extends State<LoginScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
@@ -27,7 +27,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Sign Up',
+          'Login',
           style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
         ),
         centerTitle: true,
@@ -38,18 +38,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           child: Column(
             children: [
               SizedBox(
-                height: 40,
-              ),
-              CustomTextFormField(
-                textController: controller.nameController,
-                hintText: 'Name',
-                validator: (value) {
-                  if(value == ''){
-                    return 'Enter Your Name';
-                  }else{
-                    return null;
-                  }
-                },
+                height: 80,
               ),
               CustomTextFormField(
                 textController: controller.emailController,
@@ -74,57 +63,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: Row(
-                  children: [
-                    Checkbox(
-                      checkColor: AppColors.white,
-                      activeColor: AppColors.primary,
-                      side: BorderSide(
-                        color: AppColors.primary,
-                      ),
-                      value:
-                          controller.termsNConditions, // A boolean variable to manage the checkbox state
-                      onChanged: (newValue) {
-                        setState(() {
-                          controller.termsNConditions = newValue!;
-                        });
-                      },
-                      isError: controller.checkBox,
-                    ),
-                    Flexible(
-                      // child: Text(
-                      //   "By signing up, you agree to the Terms of Service and Privacy Policy",
-                      //   style: TextStyle(
-                      //     color: AppColors.black,
-                      //     fontSize: 14,
-                      //     fontWeight: FontWeight.w400,
-                      //   ),
-                      // ),
-                      child: Text.rich(
-                        TextSpan(
-                          text: 'By signing up, you agree to the ',
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: 'Terms of Service and Privacy Policy',
-                              style: TextStyle(
-                                  color: AppColors
-                                      .primary, // Change color to blue or any other color you prefer
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14),
-                            ),
-                          ],
-                          style: TextStyle( color: Theme.of(context).brightness == Brightness.light ? AppColors.black : AppColors.grey,
-                              fontWeight: FontWeight.w500, fontSize: 14),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              SizedBox(height: 40,),
               CustomElevatedButton(child: Text(
-                'Sign Up',
+                'Login',
                 style: TextStyle(
                     color: AppColors.white,
                     fontSize: 18,
@@ -134,21 +75,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 //   MaterialPageRoute(builder: (context) => BottomNavBar())),
                 onPressed: (){
                   if (_formKey.currentState!.validate()) {
-                    if(controller.termsNConditions){
                       print('validate');
-                      controller.signUserUp(context);
-                    }else{
-                      setState(() {
-                        controller.checkBox = true;
-                      });
-                    }
+                      controller.signUserIn(context);
                   }
                 },
               ),
               Text(
                 'Or with',
                 style:
-                    TextStyle(color: AppColors.grey, fontWeight: FontWeight.w700),
+                TextStyle(color: AppColors.grey, fontWeight: FontWeight.w700),
               ),
               GestureDetector(
                 onTap: ()=>controller.signInWithGoogle(context),
@@ -167,9 +102,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           width: 10,
                         ),
                         Text(
-                          'Sign Up with Google',
+                          'Sign In with Google',
                           style:
-                              TextStyle(fontWeight: FontWeight.w600, color: Theme.of(context).brightness == Brightness.light ? AppColors.black : AppColors.white, fontSize: 18),
+                          TextStyle(fontWeight: FontWeight.w600, color: Theme.of(context).brightness == Brightness.light ? AppColors.black : AppColors.white, fontSize: 18),
                         )
                       ],
                     ),
@@ -177,16 +112,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
               SizedBox(
-                height: 10,
+                height: 20,
               ),
               InkWell(
-                onTap: ()=> Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen())),
+                onTap: ()=> Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignUpScreen())),
                 child: Text.rich(
                   TextSpan(
-                    text: 'Already have an account? ',
+                    text: "Don't have an account? ",
                     children: <TextSpan>[
                       TextSpan(
-                        text: 'Login',
+                        text: 'Sign Up',
                         style: TextStyle(
                             color: AppColors
                                 .primary, // Change color to blue or any other color you prefer
@@ -287,7 +222,7 @@ class CustomTextFormField extends StatelessWidget {
               color: AppColors.grey,
             )),
         style: TextStyle(
-          color: Theme.of(context).brightness == Brightness.light ? AppColors.black : AppColors.white
+            color: Theme.of(context).brightness == Brightness.light ? AppColors.black : AppColors.white
         ),
       ),
     );

@@ -5,5 +5,5 @@ String convertDateTime(String date){
   int day = dateTime.day;
   int month = dateTime.month;
   int year = dateTime.year;
-  return hour.toString() + ":"+ minute.toString() + " " + day.toString() + "/" + month.toString() + "/" + year.toString();
+  return "$hour:$minute $day/$month/$year";
 }
