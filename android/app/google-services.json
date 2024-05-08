@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "62222013229",
+    "project_id": "expense-tracker-44f23",
+    "storage_bucket": "expense-tracker-44f23.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:62222013229:android:a60a97ee5f80675ec939a4",
+        "android_client_info": {
+          "package_name": "com.cipherschools.assignment"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQGWRjvVJtOeAK005Fh5ZCMqSY0mp6880"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
