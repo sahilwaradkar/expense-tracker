@@ -1,12 +1,12 @@
-import 'package:assignment/bottom_nav_bar.dart';
 import 'package:assignment/controller/auth/auth_controller.dart';
+import 'package:assignment/core/common/custom_text_form_field.dart';
 import 'package:assignment/core/constant/colors.dart';
 import 'package:assignment/core/constant/image_resource.dart';
 import 'package:assignment/screens/auth/login_screen.dart';
+import 'package:assignment/core/common/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-
 import '../../core/utils/email_validation.dart';
 import '../../core/utils/password_validation.dart';
 
@@ -105,7 +105,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       child: Text.rich(
                         TextSpan(
                           text: 'By signing up, you agree to the ',
-                          children: <TextSpan>[
+                          children: const <TextSpan>[
                             TextSpan(
                               text: 'Terms of Service and Privacy Policy',
                               style: TextStyle(
@@ -184,7 +184,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: Text.rich(
                   TextSpan(
                     text: 'Already have an account? ',
-                    children: <TextSpan>[
+                    children: const <TextSpan>[
                       TextSpan(
                         text: 'Login',
                         style: TextStyle(
@@ -210,86 +210,4 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 }
 
-class CustomElevatedButton extends StatelessWidget {
-  final Widget child;
-  final Color? backgroundColor;
-  final VoidCallback? onPressed;
-  const CustomElevatedButton({
-    required this.child,
-    this.backgroundColor,
-    this.onPressed,
-    super.key,
-  });
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-            backgroundColor: backgroundColor ??  AppColors.primary,
-            fixedSize: const Size(double.infinity, 60),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15))),
-        child: child,
-      ),
-    );
-  }
-}
-
-class CustomTextFormField extends StatelessWidget {
-  final String? Function(String?)? validator;
-  final bool? obscureText;
-  final String hintText;
-  final IconButton? suffixIcon;
-  final TextEditingController? textController;
-  const CustomTextFormField({
-    super.key,
-    this.validator,
-    this.obscureText,
-    required this.hintText,
-    this.textController,
-    this.suffixIcon,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-      child: TextFormField(
-        controller: textController,
-        obscureText: obscureText ?? false,
-        validator: validator,
-        decoration: InputDecoration(
-
-            suffixIcon: suffixIcon,
-            contentPadding: EdgeInsets.all(20),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide(color: AppColors.grey.withOpacity(0.2)),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide(color: AppColors.grey.withOpacity(0.2)),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide(color: AppColors.red.withOpacity(0.8)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide(color: AppColors.grey),
-            ),
-            hintText: hintText,
-            hintStyle: TextStyle(
-              color: AppColors.grey,
-            )),
-        style: TextStyle(
-          color: Theme.of(context).brightness == Brightness.light ? AppColors.black : AppColors.white
-        ),
-      ),
-    );
-  }
-}

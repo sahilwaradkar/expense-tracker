@@ -55,7 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Image.asset('assets/images/logo.png',),
-                Text('CipherX', style: GoogleFonts.brunoAceSc(color: AppColors.white, fontSize: 40, fontWeight: FontWeight.w400),),
+                Text('Xpense Mate', style: GoogleFonts.brunoAceSc(color: AppColors.white, fontSize: 40, fontWeight: FontWeight.w400),),
               ],
             ),
           ),
@@ -87,10 +87,10 @@ class _SplashScreenState extends State<SplashScreen> {
                   children: [
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Welcome to', style: TextStyle(fontSize: 36, color: AppColors.white),),
-                        Text('CipherX', style: GoogleFonts.brunoAceSc(color: AppColors.white, fontSize: 36, fontWeight: FontWeight.w400),),
+                        Text('Welcome to', style: TextStyle(fontSize: 30, color: AppColors.white),),
+                        Text('Xpense Mate', style: GoogleFonts.brunoAceSc(color: AppColors.white, fontSize: 32, fontWeight: FontWeight.w400),),
                       ],
                     ),
                     InkWell(onTap: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => SignUpScreen())), child: CircleAvatar(radius: 35, backgroundColor: AppColors.white.withOpacity(0.8), child: SvgPicture.asset(ImageResource.arrowRight, width: 50, colorFilter: ColorFilter.mode(AppColors.black, BlendMode.srcIn),)))

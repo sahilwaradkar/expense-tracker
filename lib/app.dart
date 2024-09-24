@@ -4,18 +4,18 @@ import 'package:assignment/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+late Size size;
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return
-      MultiProvider(
+    size = MediaQuery.of(context).size;
+    return MultiProvider(
       providers: providerList(),
-      child:
-      MaterialApp(
-        title: 'Flutter Demo',
+      child: MaterialApp(
+        title: 'Xpense Mate',
         theme: MyTheme.lightTheme,
         darkTheme: MyTheme.darkTheme,
         home: const SplashScreen(),

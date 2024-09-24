@@ -1,8 +1,6 @@
 import 'package:assignment/controller/bottom_nav_bar/bottom_nav_bar_controller.dart';
 import 'package:assignment/core/constant/colors.dart';
 import 'package:assignment/core/constant/image_resource.dart';
-import 'package:assignment/screens/add_transaction/add_expense_screen.dart';
-import 'package:assignment/screens/add_transaction/add_income_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +13,6 @@ class BottomNavBar extends StatefulWidget {
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
-
   @override
   Widget build(BuildContext context) {
     final controller = Provider.of<BottomNavBarController>(context);
@@ -25,7 +22,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         children: controller.screens,
       ),
       floatingActionButton: FloatingActionButton(
-        shape: CircleBorder(),
+        shape: const CircleBorder(),
         backgroundColor: AppColors.primary,
         elevation: 0,
         child: Container(
@@ -39,7 +36,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 //     right: BorderSide(color: AppColors.white, width: 2),
                 //   ),
                 color: AppColors.primary),
-            child: Icon(
+            child: const Icon(
               Icons.add,
               size: 40,
               weight: 100,
@@ -51,127 +48,119 @@ class _BottomNavBarState extends State<BottomNavBar> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
-        color: Theme.of(context).brightness == Brightness.light ? AppColors.white : AppColors.black,
+        color: Theme.of(context).brightness == Brightness.light
+            ? AppColors.white
+            : AppColors.black,
         shape: const CircularNotchedRectangle(),
         notchMargin: 10,
-        child: Container(
+        child: SizedBox(
           height: 60,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  MaterialButton(
-                    onPressed: () {
-                      controller.updateIndex(0);
-                    },
-                    minWidth: 40,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(ImageResource.home,
-                            colorFilter: ColorFilter.mode(
-                                controller.currentIndex == 0
-                                    ? AppColors.primary
-                                    : Colors.grey,
-                                BlendMode.srcIn)),
-                        Text(
-                          'Home',
-                          style: TextStyle(
-                            color: controller.currentIndex == 0
+              GestureDetector(
+                onTap: () {
+                  controller.updateIndex(0);
+                },
+                // minWidth: 40,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(ImageResource.home,
+                        colorFilter: ColorFilter.mode(
+                            controller.currentIndex == 0
                                 ? AppColors.primary
                                 : Colors.grey,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  MaterialButton(
-                    onPressed: () {
-                      controller.updateIndex(1);
-                    },
-                    minWidth: 40,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(ImageResource.transaction,
-                            colorFilter: ColorFilter.mode(
-                                controller.currentIndex == 1
-                                    ? AppColors.primary
-                                    : Colors.grey,
-                                BlendMode.srcIn)),
-                        Text(
-                          'Transaction',
-                          style: TextStyle(
-                            color: controller.currentIndex == 1
-                                ? AppColors.primary
-                                : Colors.grey,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
+                            BlendMode.srcIn)),
+                    Text(
+                      'Home',
+                      style: TextStyle(
+                        color: controller.currentIndex == 0
+                            ? AppColors.primary
+                            : Colors.grey,
+                      ),
+                    )
+                  ],
+                ),
               ),
-              // SizedBox(
-              //   width: 5,
-              // ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  MaterialButton(
-                    onPressed: () {
-                      controller.updateIndex(2);
-                    },
-                    minWidth: 40,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(ImageResource.budget,
-                            colorFilter: ColorFilter.mode(
-                                controller.currentIndex == 2
-                                    ? AppColors.primary
-                                    : Colors.grey,
-                                BlendMode.srcIn)),
-                        Text(
-                          'Budget',
-                          style: TextStyle(
-                            color: controller.currentIndex == 2
+              GestureDetector(
+                onTap: () {
+                  controller.updateIndex(1);
+                },
+                // minWidth: 40,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(ImageResource.transaction,
+                        colorFilter: ColorFilter.mode(
+                            controller.currentIndex == 1
                                 ? AppColors.primary
                                 : Colors.grey,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  MaterialButton(
-                    onPressed: () {
-                      controller.updateIndex(3);
-                    },
-                    minWidth: 40,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(ImageResource.profile,
-                            colorFilter: ColorFilter.mode(
-                                controller.currentIndex == 3
-                                    ? AppColors.primary
-                                    : Colors.grey,
-                                BlendMode.srcIn)),
-                        Text(
-                          'Profile',
-                          style: TextStyle(
-                            color: controller.currentIndex == 3
+                            BlendMode.srcIn)),
+                    Text(
+                      'Transaction',
+                      style: TextStyle(
+                        color: controller.currentIndex == 1
+                            ? AppColors.primary
+                            : Colors.grey,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.08,
+              ),
+              GestureDetector(
+                onTap: () {
+                  controller.updateIndex(2);
+                },
+                // minWidth: 40,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(ImageResource.budget,
+                        colorFilter: ColorFilter.mode(
+                            controller.currentIndex == 2
                                 ? AppColors.primary
                                 : Colors.grey,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              )
+                            BlendMode.srcIn)),
+                    Text(
+                      'Report',
+                      style: TextStyle(
+                        color: controller.currentIndex == 2
+                            ? AppColors.primary
+                            : Colors.grey,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  controller.updateIndex(3);
+                },
+                // minWidth: 40,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(ImageResource.profile,
+                        colorFilter: ColorFilter.mode(
+                            controller.currentIndex == 3
+                                ? AppColors.primary
+                                : Colors.grey,
+                            BlendMode.srcIn)),
+                    Text(
+                      'Profile',
+                      style: TextStyle(
+                        color: controller.currentIndex == 3
+                            ? AppColors.primary
+                            : Colors.grey,
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ],
           ),
         ),

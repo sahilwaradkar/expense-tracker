@@ -1,11 +1,9 @@
 import 'package:assignment/core/utils/get_month.dart';
 import 'package:assignment/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/constant/colors.dart';
-import '../../core/constant/image_resource.dart';
 import '../../database/database.dart';
 
 class TransactionScreen extends StatefulWidget {
@@ -20,18 +18,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
   Widget build(BuildContext context) {
     final databaseProvider = Provider.of<DatabaseProvider>(context);
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.primary,
-        centerTitle: true,
-        title: Text(
-          'Transactions',
-          style: TextStyle(
-              fontWeight: FontWeight.w500,
-              color: Theme.of(context).brightness == Brightness.light
-                  ? AppColors.white
-                  : AppColors.white),
-        ),
-      ),
+      appBar: CustomAppBar(title: 'Transaction',),
       body: FutureBuilder(
         future: databaseProvider.getTransactions(),
         builder: (_, snapshot){
@@ -49,4 +36,34 @@ class _TransactionScreenState extends State<TransactionScreen> {
       ),
     );
   }
+}
+
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final String title;
+  CustomAppBar({
+    required this.title,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      backgroundColor: AppColors.primary,
+      centerTitle: true,
+      title: Text(
+        title,
+        style: TextStyle(
+            fontWeight: FontWeight.w500,
+            color: Theme.of(context).brightness == Brightness.light
+                ? AppColors.white
+                : AppColors.white),
+      ),
+    );
+  }
+
+
+  final height = AppBar().preferredSize.height;
+
+  @override
+  Size get preferredSize => Size.fromHeight(height);
 }

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import '../../core/constant/colors.dart';
 import '../../screens/add_transaction/add_expense_screen.dart';
 import '../../screens/add_transaction/add_income_screen.dart';
-import '../../screens/budget/budget_screen.dart';
 import '../../screens/home/home_screen.dart';
 import '../../screens/profile/profile_screen.dart';
+import '../../screens/report/report_screen.dart';
 import '../../screens/transaction/transaction_screen.dart';
 
 class BottomNavBarController extends ChangeNotifier{
@@ -13,7 +13,7 @@ class BottomNavBarController extends ChangeNotifier{
   final List<Widget> screens = [
     HomeScreen(),
     TransactionScreen(),
-    BudgetScreen(),
+    ReportScreen(),
     ProfileScreen(),
   ];
 

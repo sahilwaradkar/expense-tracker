@@ -8,6 +8,13 @@ class DatabaseProvider extends ChangeNotifier{
   List<TransactionModel> _transactions = [];
   List<TransactionModel> get transactions => _transactions;
 
+  String reportType = "Income";
+
+  void changeReportType(String type){
+    reportType = type;
+    notifyListeners();
+  }
+
   double income = 0;
   double expense = 0;
   double balance = 0;
@@ -23,6 +30,10 @@ class DatabaseProvider extends ChangeNotifier{
   Future<Database> initDatabase() async {
     String path = join(await getDatabasesPath(), 'expense_tracker.db');
     return await openDatabase(path, version: 1, onCreate: _createDb);
+  }
+
+  Future<void> closeDatabase() async {
+    if (_database != null) await _database!.close();
   }
 
   Future<void> _createDb(Database db, int version) async {
@@ -43,23 +54,23 @@ class DatabaseProvider extends ChangeNotifier{
     final Database? db = await database;
     await db!.insert('transactions', transaction.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
-    getTransactions();
-    updateBalance();
+    await getTransactions();
+    await updateBalance();
     notifyListeners();
   }
 
-
   Future<List<TransactionModel>> getTransactions() async {
+    debugPrint("Print");
     final Database? db = await database;
     final List<Map<String, dynamic>> maps = await db!.query('transactions');
-
     _transactions =  List.generate(maps.length, (i) {
+      debugPrint("maps -->> ${maps}");
       return TransactionModel.fromMap(maps[i]);
     });
     return _transactions;
   }
 
-  void updateBalance(){
+  Future<void> updateBalance ()async{
     income = 0;
     expense = 0;
     balance = 0;
